@@ -13,6 +13,10 @@ let carrito = {}
 document.addEventListener('DOMContentLoaded', () => {
 
     fetchData()
+    if(localStorage.getItem('carrito')) {
+        carrito = JSON.parse(localStorage.getItem('carrito'))
+        pintarCarrito(carrito)
+    }
  })   
  
 //Captura de Evento al hacer click en comprar. Llamando la funcion addCarrito para agregar objetos al carrito de compras
@@ -20,6 +24,11 @@ cards.addEventListener('click', e => {
 
     addCarrito(e)
 
+
+})
+
+items.addEventListener('click', e => {
+    btnAccion(e)
 })
 
 // el Async para traer todo de la base de datos. IMPORTANTE REPASAR ESTO.
@@ -62,11 +71,11 @@ const addCarrito = e => {
 }
 
 //Captura el valor del contenido de las tarjetas al hacer click en los botones, guarda en un objeto la información. Adicionalmente, hace la tarea de aumentar en cantidad con cada click. Todavía me parece brujería.
-const setCarrito = objeto => {
+const setCarrito = elemento => {
     const producto = {
-        id: objeto.querySelector('.btn-dark').dataset.id,
-        title: objeto.querySelector('h5').textContent,
-        precio: objeto.querySelector('p').textContent,
+        id: elemento.querySelector('.btn-dark').dataset.id,
+        title: elemento.querySelector('h5').textContent,
+        precio: elemento.querySelector('p').textContent,
         cantidad: 1
     }
 
@@ -94,4 +103,60 @@ const pintarCarrito = (carrito) => {
     })
     items.appendChild(fragment)
 
+    pintarFooter(carrito)
+
+    localStorage.setItem('carrito', JSON.stringify(carrito))
+
+}
+
+const pintarFooter = (carrito) => {
+
+    footer.innerHTML = ''
+    if(Object.keys(carrito).length === 0) {
+        footer.innerHTML =  `<th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>`
+    }
+    else {
+        const nCantidad = Object.values(carrito).reduce((acc, {cantidad}) => acc + cantidad, 0)
+        const nPrecio = Object.values(carrito).reduce((acc, {cantidad, precio}) => acc + cantidad * precio, 0)
+    
+        templateFooter.querySelectorAll('td')[0].textContent = nCantidad
+        templateFooter.querySelector('span').textContent = nPrecio
+    
+        const clone = templateFooter.cloneNode(true)
+        fragment.appendChild(clone)
+        footer.appendChild(fragment)
+    
+    }
+    
+
+    const btnVaciar = document.getElementById('vaciar-carrito')
+    if (btnVaciar) {
+        btnVaciar.addEventListener('click', () =>{
+            carrito = {}
+            pintarCarrito(carrito)
+
+        })
+    }
+}
+
+const btnAccion = e => {
+
+    //Accion de aumentar
+    if(e.target.classList.contains('btn-info')) {
+        // carrito[e.target.dataset.id]
+        const producto = carrito[e.target.dataset.id]
+        producto.cantidad++
+        carrito[e.target.dataset.id] = {...producto}
+        pintarCarrito(carrito)
+    }
+
+    if(e.target.classList.contains('btn-danger')) {
+        const producto = carrito[e.target.dataset.id]
+        producto.cantidad--
+        if (producto.cantidad === 0) {
+            delete carrito[e.target.dataset.id]
+        }
+        pintarCarrito(carrito)
+    }
+    e.stopPropagation()
 }

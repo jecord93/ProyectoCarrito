@@ -10,36 +10,37 @@
 <body>
 
 <div class="container">
-  <h1>Carrito</h1>
+  <h4>Cards</h4>
   <hr>
-
+  
   <div class="row" id="cards">
-<!-- Aquí van las tarjetas de los productos en venta -->
+    <!-- Aquí van las tarjetas de los productos en venta -->
   </div>
+  
+  <h4>Carrito de compras</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Item</th>
+        <th scope="col">Cantidad</th>
+        <th scope="col">Acción</th>
+        <th scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody id="items">
+      
+      <!-- aquí van los elementos del template.carrito -->
+      
+    </tbody>
+    <tfoot>
+      <tr id="footer">
+        <!-- aquí van los elementos del footer -->
+        <th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>
+      </tr>
+    </tfoot>
 
-<h4>Carrito de compras</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Item</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Acción</th>
-            <th scope="col">Total</th>
-          </tr>
-        </thead>
-        <tbody id="items">
-
-<!-- aquí van los elementos del template.carrito -->
-
-        </tbody>
-        <tfoot>
-          <tr id="footer">
-            <th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>
-          </tr>
-        </tfoot>
       </table>
-      <h4>Cards</h4>
       <div class="row" id="cards"></div> 
 
 <template id="template-carrito">
